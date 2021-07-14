@@ -5,7 +5,6 @@ const requiredFields = ["vin", "make", "model", "mileage"];
 const checkCarId = async (req, res, next) => {
   try {
     const car = await Cars.getById(req.params.id);
-    console.log(car)
     if (!car) {
       next({
         status: 404,
