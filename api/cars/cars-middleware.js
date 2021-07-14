@@ -5,6 +5,7 @@ const requiredFields = ["vin", "make", "model", "mileage"];
 const checkCarId = async (req, res, next) => {
   try {
     const car = await Cars.getById(req.params.id);
+    console.log(car)
     if (!car) {
       next({
         status: 404,
@@ -40,7 +41,6 @@ const checkVinNumberValid = (req, res, next) => {
 };
 
 const checkVinNumberUnique = async (req, res, next) => {
-  console.log(await Cars.getByVin(req.body.vin));
   try {
     if (await Cars.getByVin(req.body.vin)) {
       next({ status: 400, message: `vin ${req.body.vin} already exists` });

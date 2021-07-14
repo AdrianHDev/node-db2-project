@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", checkCarId, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const cars = await Cars.getAll();
     res.json(cars);
@@ -18,7 +18,7 @@ router.get("/", checkCarId, async (req, res, next) => {
     next({ status: 500, message: "Internal Server Error" });
   }
 });
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", checkCarId, async (req, res, next) => {
   try {
     const car = await Cars.getById(req.params.id);
     res.json(car);
