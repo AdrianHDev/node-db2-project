@@ -1,4 +1,5 @@
 const Cars = require("./cars-model");
+const vinV = require('vin-validator');
 
 const requiredFields = ['vin', 'make', 'model', 'mileage'];
 const checkCarId = async (req, res, next) => {
@@ -19,25 +20,31 @@ const checkCarId = async (req, res, next) => {
 };
 
 const checkCarPayload = (req, res, next) => {
-  console.log('Checking payload');
   requiredFields.forEach(field => {
     if (!req.body[field]) {
       next({
         status: 400, message: `${field} is missing`
       })
-    } else {
-      next();
     }
   })
   next();
 };
 
 const checkVinNumberValid = (req, res, next) => {
-  next();
+  if (vinV.validate(req.body.vin)) {
+    next();
+  } else {
+    next({status: 400, message: `vin ${req.body.vin} is invalid`})
+  }
 };
 
-const checkVinNumberUnique = (req, res, next) => {
-  next();
+const checkVinNumberUnique = async (req, res, next) => {
+  console.log(await Cars.getByVin(req.body.vin))
+  if (await Cars.getByVin(req.body.vin)) {
+    next({status: 400, message: `vin ${req.body.vin} already exists`})
+  } else {
+    next();
+  }
 };
 
 module.exports = {
