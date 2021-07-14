@@ -1,29 +1,43 @@
-const Cars = require('./cars-model');
+const Cars = require("./cars-model");
 
+const requiredFields = ['vin', 'make', 'model', 'mileage'];
 const checkCarId = async (req, res, next) => {
-  try { 
+  try {
     const car = await Cars.getById(req.params.id);
     if (!car) {
-      next({status: 404, message:`car with id ${req.params.id} is not found` })
+      next({
+        status: 404,
+        message: `car with id ${req.params.id} is not found`,
+      });
     } else {
       req.car = car;
-      next()
+      next();
     }
   } catch (error) {
-    next({status: 500, message: "Internal Server Error"});
-}
+    next({ status: 500, message: "Internal Server Error" });
+  }
 };
 
 const checkCarPayload = (req, res, next) => {
-  // DO YOUR MAGIC
+  console.log('Checking payload');
+  requiredFields.forEach(field => {
+    if (!req.body[field]) {
+      next({
+        status: 400, message: `${field} is missing`
+      })
+    } else {
+      next();
+    }
+  })
+  next();
 };
 
 const checkVinNumberValid = (req, res, next) => {
-  // DO YOUR MAGIC
+  next();
 };
 
 const checkVinNumberUnique = (req, res, next) => {
-  // DO YOUR MAGIC
+  next();
 };
 
 module.exports = {
