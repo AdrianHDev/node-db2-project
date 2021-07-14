@@ -32,7 +32,9 @@ router.post(
   checkVinNumberValid,
   checkVinNumberUnique,
   async (req, res, next) => {
-    res.json({ message: `posting car.`, car: req.body });
+    Cars.create(req.body).then(resolv => {
+        res.json(resolv)
+    })
   }
 );
 

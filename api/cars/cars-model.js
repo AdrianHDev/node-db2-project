@@ -4,20 +4,24 @@ const getAll = () => {
   return db("cars");
 };
 
-const getById = id => {
-  return db("cars").where('id', id).first();
+const getById = (id) => {
+  return db("cars").where("id", id).first();
 };
 
-const getByVin = vin => {
-  return db("cars").where('vin', vin).first();
-}
-const create = () => {
-  // DO YOUR MAGIC
+const getByVin = (vin) => {
+  return db("cars").where("vin", vin).first();
+};
+const create = (car) => {
+  return db("cars")
+    .insert(car)
+    .then((res) => {
+      return getById(res);
+    });
 };
 
 module.exports = {
   getAll,
   getById,
   create,
-  getByVin
+  getByVin,
 };
